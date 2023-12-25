@@ -1,17 +1,39 @@
-//importing node express
-const express = require('express');
-const app = express();
+const express = require("express"); //import expresss function
+const app = express(); // initialize express
+const route = express.Router();
+// making json file to read so requiring fs library
+const fs = require("fs");
 
-// const ejs = require('ejs');
+app.use(express.static("public")); // to use css do this and folder
 
+// setting viewengine to view ejs file
+app.set("view engine", "ejs");
 
-// app.use('/',(req, res) => {
-    // res.json({message: "Hello world"});
+function fetchdata() {
+  const data = fs.readFileSync("./datas/books.json");
+  const dataJSON = JSON.parse(data);
+  return dataJSON;
+}
 
+app.get("/", (req, res) => {
+  const books = fetchdata();
+  res.render("pages/index", { books: books });
+});
 
-app.set("view engine", "ejs");   // to show form node.js
+app.get("/book/:isbn", (req,res)=> {
+    const {isbn} = req.params;
+    const books = fetchdata();
+    const selectbook = books.find ((book) => book.isbn ===isbn);
+    res.render("pages/book", {book: selectbook});
+    // console.log(selectbook);
+    // res.render("pages/book");
 
-app.get("/",(req,res) => res.render("pages/index"));
+    //object unpacking
+    //aaray unpacking
 
-// } );
-app.listen(8000);
+});
+
+// uploading to the website with port 1070
+app.listen(1070, () => {
+  console.log("##-- Connected to the port 1070 --##");
+});
