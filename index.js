@@ -29,8 +29,6 @@ app.get("/book/:isbn", (req,res)=> {
     // res.render("pages/book");
 
     //object unpacking
-    //aaray unpacking
-
 });
 
 // uploading to the website with port 1070
